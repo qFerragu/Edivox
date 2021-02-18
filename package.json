@@ -1,0 +1,13 @@
+{
+  "name": "com.qferragu.edivox",
+  "version": "1.0.0",
+  "displayName": "Edivox",
+  "description": "Voxel Editor",
+  "unity": "2019.1",
+  "author": {
+    "name": "Ferragu Quentin",
+    "email": "ferraguquentin@gmail.com",
+    "url": "https://ferraguquentin.wixsite.com/website"
+  },
+  "type": "tool"
+}

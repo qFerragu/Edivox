@@ -1,0 +1,15 @@
+{
+    "name": "Edivox.Editor",
+    "references": [
+        "GUID:0c38ac222d293a24aa9d2c695bb0b7a9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
