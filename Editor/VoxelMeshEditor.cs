@@ -65,7 +65,7 @@ namespace Edivox.Editor
                 Vector3 normal = VoxelMesh.GetVectorFromDirection(dir);
                 plane.transform.rotation = Quaternion.LookRotation(normal);
 
-                Vector3 center = (voxelMesh.meshSize - Vector3Int.one);
+                Vector3 center = (voxelMesh.meshSize);
                 center.Set(center.x / 2f, center.y / 2f, center.z / 2f);
                 plane.transform.position = center;
 

@@ -66,17 +66,17 @@ namespace Edivox.Editor
             Selection.activeGameObject = newMesh;
             EditorUtility.SetDirty(voxelMesh);
 
-            for (int x = 0; x < newMeshSize.x; x++)
-            {
-                for (int y = 0; y < newMeshSize.y; y++)
-                {
-                    for (int z = 0; z < newMeshSize.z; z++)
-                    {
-                        VoxelData vd = voxelMesh.GetVoxel(x, y, z);
-                        EditorUtility.SetDirty(vd.render);
-                    }
-                }
-            }
+            //for (int x = 0; x < newMeshSize.x; x++)
+            //{
+            //    for (int y = 0; y < newMeshSize.y; y++)
+            //    {
+            //        for (int z = 0; z < newMeshSize.z; z++)
+            //        {
+            //            VoxelData vd = voxelMesh.GetVoxel(x, y, z);
+            //            EditorUtility.SetDirty(vd.render);
+            //        }
+            //    }
+            //}
 
         }
     }

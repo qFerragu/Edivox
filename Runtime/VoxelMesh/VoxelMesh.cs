@@ -47,17 +47,18 @@ namespace Edivox.Runtime
         public ColorPalette colorPalette;
         public ColorPalette ColorPalette { get => colorPalette; set => colorPalette = value; }
         public MeshFilter meshFiltrer = null;
+        public MeshRenderer meshRenderer = null;
+        public MeshCollider meshCollider = null;
+        public ExportSettings meshSettings = new ExportSettings();
+        public VoxelMeshExport meshExport = null;
+
+        bool voxelModified = true;
 
         void Start()
         {
 
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
 
         void OnDestroy()
         {
@@ -81,34 +82,51 @@ namespace Edivox.Runtime
             voxelTemplate.IsVisible = isFill;
             voxelTemplate.colorId = 0;
             meshSize = _size;
+
             voxelsArray = new MultiArrayVoxelData(meshSize.x, meshSize.y, meshSize.z);
+
 
             for (int x = 0; x < _size.x; x++)
             {
                 for (int y = 0; y < _size.y; y++)
                 {
-
                     for (int z = 0; z < _size.z; z++)
                     {
 
+                        //VoxelData voxel = voxelsArray.GetVoxel(x, y, z);
+                        //voxel.Copy(voxelTemplate);
+
+                        //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        //go.transform.parent = transform;
+                        //Vector3Int position = new Vector3Int(x, y, z);
+                        //go.transform.position = position;
+                        //VoxelRender render = go.AddComponent<VoxelRender>();
+                        //render.voxelData = voxel;
+
+                        //voxel.Position = position;
+                        //voxel.render = render;
+                        //render.voxelMesh = this;
+                        //render.UpdateVoxelRender();
+
                         VoxelData voxel = voxelsArray.GetVoxel(x, y, z);
                         voxel.Copy(voxelTemplate);
-
-                        GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                        go.transform.parent = transform;
-                        Vector3Int position = new Vector3Int(x, y, z);
-                        go.transform.position = position;
-                        VoxelRender render = go.AddComponent<VoxelRender>();
-                        render.voxelData = voxel;
-
-                        voxel.Position = position;
-                        voxel.render = render;
-                        render.voxelMesh = this;
-                        render.UpdateVoxelRender();
+                        voxel.Position = new Vector3Int(x, y, z);
                     }
-
                 }
             }
+
+            meshSettings.pivot = Vector3.zero;
+            meshExport = new VoxelMeshExport(meshSettings);
+
+            meshFiltrer = gameObject.AddComponent<MeshFilter>();
+            meshFiltrer.sharedMesh = new Mesh();
+            meshFiltrer.sharedMesh.name = gameObject.name;
+            meshRenderer = gameObject.AddComponent<MeshRenderer>();
+            Material mat = new Material(Shader.Find("Diffuse"));
+            mat.mainTexture = colorPalette.CreateTexture();
+            meshRenderer.material = mat;
+            meshCollider = gameObject.AddComponent<MeshCollider>();
+            RefreshMesh();
         }
 
         public bool IsInside(int _x, int _y, int _z)
@@ -141,15 +159,15 @@ namespace Edivox.Runtime
         }
 
 
-        public void UpdateVoxel(Vector3Int _pos)
-        {
-            VoxelData voxel = GetVoxel(_pos);
-            if (voxel != null)
-            {
-                voxel.Copy(voxelTemplate);
-                voxel.render.UpdateVoxelRender();
-            }
-        }
+        //public void UpdateVoxel(Vector3Int _pos)
+        //{
+        //    VoxelData voxel = GetVoxel(_pos);
+        //    if (voxel != null)
+        //    {
+        //        voxel.Copy(voxelTemplate);
+        //        voxel.render.UpdateVoxelRender();
+        //    }
+        //}
 
         public void SetVoxel(Vector3Int _pos, VoxelData _data)
         {
@@ -160,7 +178,8 @@ namespace Edivox.Runtime
             if (voxel != null)
             {
                 voxel.Copy(_data);
-                voxel.render.UpdateVoxelRender();
+                voxelModified = true;
+                //voxel.render.UpdateVoxelRender();
             }
         }
 
@@ -170,7 +189,8 @@ namespace Edivox.Runtime
             if (voxel != null)
             {
                 voxel.IsVisible = _visible;
-                voxel.render.UpdateVoxelRender();
+                voxelModified = true;
+                //voxel.render.UpdateVoxelRender();
             }
         }
 
@@ -184,23 +204,31 @@ namespace Edivox.Runtime
                 }
             }
 
-            for (int x = 0; x < meshSize.x; x++)
-            {
-                for (int y = 0; y < meshSize.y; y++)
-                {
+            meshFiltrer = gameObject.GetComponent<MeshFilter>();
+            meshRenderer = gameObject.GetComponent<MeshRenderer>();
+            Material mat = new Material(Shader.Find("Diffuse"));
+            mat.mainTexture = colorPalette.CreateTexture();
+            meshRenderer.material = mat;
+            meshCollider = gameObject.GetComponent<MeshCollider>();
+            voxelModified = true;
+            RefreshMesh();
+            //for (int x = 0; x < meshSize.x; x++)
+            //{
+            //    for (int y = 0; y < meshSize.y; y++)
+            //    {
 
-                    for (int z = 0; z < meshSize.z; z++)
-                    {
-                        VoxelData vo = voxelsArray.GetVoxel(x, y, z);
+            //        for (int z = 0; z < meshSize.z; z++)
+            //        {
+            //            VoxelData vo = voxelsArray.GetVoxel(x, y, z);
 
-                        if (vo.render.voxelData != vo)
-                        {
-                            vo.render.voxelData = vo;
-                        }
-                        vo.render.UpdateVoxelRender();
-                    }
-                }
-            }
+            //            if (vo.render.voxelData != vo)
+            //            {
+            //                vo.render.voxelData = vo;
+            //            }
+            //            vo.render.UpdateVoxelRender();
+            //        }
+            //    }
+            //}
         }
 
         public void Fill(bool _visible)
@@ -216,12 +244,22 @@ namespace Edivox.Runtime
 
                         vo.IsVisible = _visible;
                         vo.colorId = voxelTemplate.colorId;
-                        vo.render.UpdateVoxelRender();
+                        voxelModified = true;
+                        //vo.render.UpdateVoxelRender();
                     }
 
                 }
             }
 
+        }
+
+        public void RefreshMesh()
+        {
+            if (voxelModified && meshExport != null)
+            {
+                meshExport.GenerateMesh(this, meshFiltrer, meshCollider);
+                voxelModified = false;
+            }
         }
 
     }

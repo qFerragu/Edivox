@@ -17,7 +17,7 @@ namespace Edivox.Runtime
         public Vector3Int Position { get => position; set => position = value; }
         public bool IsVisible { get => isVisible; set => isVisible = value; }
         public int colorId;
-        public VoxelRender render;
+        //public VoxelRender render;
 
         static public VoxelData Clone(VoxelData _voxel)
         {
@@ -100,9 +100,9 @@ namespace Edivox.Runtime
         public VoxelData GetVoxel(Vector3 _worldPos)
         {
             Vector3Int pos = new Vector3Int(
-                Mathf.RoundToInt(_worldPos.x),
-                Mathf.RoundToInt(_worldPos.y),
-                Mathf.RoundToInt(_worldPos.z));
+                Mathf.FloorToInt(_worldPos.x),
+                Mathf.FloorToInt(_worldPos.y),
+                Mathf.FloorToInt(_worldPos.z));
 
             return GetVoxel(pos);
         }

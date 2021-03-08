@@ -25,24 +25,24 @@ namespace Edivox.Editor
 
         void RemoveAllVerticeInRay(RaycastHit hit, Ray ray)
         {
-            VoxelRender render = null;
+            //VoxelRender render = null;
 
-            RaycastHit[] hitArray = Physics.RaycastAll(ray);
+            //RaycastHit[] hitArray = Physics.RaycastAll(ray);
 
-            if (hitArray.Length > 0)
-            {
-                Undo.RecordObject(voxelMesh, "Laser VoxelMesh");
-                EditorUtility.SetDirty(voxelMesh);
-            }
+            //if (hitArray.Length > 0)
+            //{
+            //    Undo.RecordObject(voxelMesh, "Laser VoxelMesh");
+            //    EditorUtility.SetDirty(voxelMesh);
+            //}
 
 
-            foreach (var item in hitArray)
-            {
-                if (item.collider.gameObject.TryGetComponent<VoxelRender>(out render))
-                {
-                    RemoveVoxelHit(item);
-                }
-            }
+            //foreach (var item in hitArray)
+            //{
+            //    if (item.collider.gameObject.TryGetComponent<VoxelRender>(out render))
+            //    {
+            //        RemoveVoxelHit(item);
+            //    }
+            //}
 
         }
 
@@ -50,17 +50,17 @@ namespace Edivox.Editor
 
         void RemoveAllVerticeInRay(Ray ray)
         {
-            RaycastHit hit;
-            VoxelRender render = null;
-            bool isValid = true;
-            while (isValid && Physics.Raycast(ray, out hit))
-            {
-                isValid = hit.collider.gameObject.TryGetComponent<VoxelRender>(out render);
-                if (isValid)
-                {
-                    RemoveVoxelHit(hit);
-                }
-            }
+            //RaycastHit hit;
+            //VoxelRender render = null;
+            //bool isValid = true;
+            //while (isValid && Physics.Raycast(ray, out hit))
+            //{
+            //    isValid = hit.collider.gameObject.TryGetComponent<VoxelRender>(out render);
+            //    if (isValid)
+            //    {
+            //        RemoveVoxelHit(hit);
+            //    }
+            //}
         }
 
         void RemoveVoxelHit(RaycastHit hit)

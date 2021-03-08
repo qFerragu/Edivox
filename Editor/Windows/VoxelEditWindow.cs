@@ -40,9 +40,6 @@ namespace Edivox.Editor
 
                 GUILayout.Label(mode.ToString());
 
-
-
-
                 EditorGUI.BeginDisabledGroup(mode == Tool.ToolMode.Add);
                 if (GUILayout.Button("Add"))
                 {
@@ -148,6 +145,7 @@ namespace Edivox.Editor
                     isPress = false;
                 }
             }
+            voxelMesh.RefreshMesh();
         }
 
         void OnSelectionChange()
@@ -320,6 +318,8 @@ namespace Edivox.Editor
                 string path = EditorUtility.SaveFilePanel("Export VoxelMesh", Application.dataPath, voxelMesh.gameObject.name, "obj");
                 MeshFilter mesh = cube.GetComponent<MeshFilter>();
                 mesh.name = Path.GetFileNameWithoutExtension(path);
+                mesh.sharedMesh = new Mesh();
+                mesh.sharedMesh.name = mesh.name;
 
                 VoxelMeshExport meshExport = new VoxelMeshExport(exportSettings);
                 meshExport.GenerateMesh(voxelMesh, mesh);

@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System;
+using Edivox.Runtime;
 
 namespace Edivox.Editor
 {

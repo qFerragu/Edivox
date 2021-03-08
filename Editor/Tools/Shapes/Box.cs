@@ -36,11 +36,11 @@ namespace Edivox.Editor
                 Vector3Int max = Vector3Int.zero;
 
                 GetMinMaxSelection(startPos, lastPos, ref min, ref max);
-                Vector3 centrer = (Vector3)(max - min) / 2f + min;
+                Vector3 center = (Vector3)(max - min) / 2f + min;
 
                 Handles.color = Color.red;
-                Vector3 posVoxel = centrer;
-                Handles.DrawWireCube(posVoxel, (max - min) + Vector3Int.one);
+                Vector3 posVoxel = center;
+                Handles.DrawWireCube(posVoxel + Vector3.one * 0.5f, (max - min) + Vector3Int.one);
             }
 
         }

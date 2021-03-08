@@ -72,7 +72,7 @@ namespace Edivox.Editor
             {
                 Handles.color = Color.red;
                 Vector3 posVoxel = voxel.Position;
-                Handles.DrawWireCube(posVoxel, Vector3Int.one);
+                Handles.DrawWireCube(posVoxel + Vector3.one * 0.5f, Vector3Int.one);
             }
         }
 

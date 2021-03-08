@@ -30,8 +30,6 @@ namespace Edivox.Editor
         public override void OnDrag(RaycastHit hit)
         {
 
-
-
             //if (lastVoxelModified == null)
             //{
             //    VoxelData voxel = GetVoxelFromHitMode(hit, mode);
@@ -92,7 +90,7 @@ namespace Edivox.Editor
             {
                 Handles.color = Color.red;
                 Vector3 posVoxel = voxel.Position;
-                Handles.DrawWireCube(posVoxel, Vector3.one);
+                Handles.DrawWireCube(posVoxel + Vector3.one * 0.5f, Vector3.one);
             }
         }
 
