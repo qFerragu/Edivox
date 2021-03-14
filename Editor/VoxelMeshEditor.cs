@@ -14,7 +14,7 @@ namespace Edivox.Editor
 
         public override void OnInspectorGUI()
         {
-            DrawDefaultInspector();
+            //DrawDefaultInspector();
             if (GUILayout.Button("Voxel Mesh Window"))
             {
                 VoxelEditWindow.ShowWindow();

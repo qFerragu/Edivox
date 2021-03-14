@@ -25,42 +25,113 @@ namespace Edivox.Editor
 
         void RemoveAllVerticeInRay(RaycastHit hit, Ray ray)
         {
-            //VoxelRender render = null;
-
-            //RaycastHit[] hitArray = Physics.RaycastAll(ray);
-
-            //if (hitArray.Length > 0)
-            //{
-            //    Undo.RecordObject(voxelMesh, "Laser VoxelMesh");
-            //    EditorUtility.SetDirty(voxelMesh);
-            //}
 
 
-            //foreach (var item in hitArray)
-            //{
-            //    if (item.collider.gameObject.TryGetComponent<VoxelRender>(out render))
-            //    {
-            //        RemoveVoxelHit(item);
-            //    }
-            //}
+            RaycastHit[] hitArray = Physics.RaycastAll(ray);
 
+            if (hitArray.Length >= 2)
+            {
+                VoxelData start = voxelMesh.GetVoxel(GetHitPosFromMode(hitArray[hitArray.Length - 1], ToolMode.Sub));
+                VoxelData end = voxelMesh.GetVoxel(GetHitPosFromMode(hitArray[0], ToolMode.Add));
+
+                if (start != null && end != null)
+                {
+                    LaserVoxels(start.Position, end.Position);
+                }
+            }
         }
 
 
-
-        void RemoveAllVerticeInRay(Ray ray)
+        void LaserVoxels(Vector3Int start, Vector3Int end)
         {
-            //RaycastHit hit;
-            //VoxelRender render = null;
-            //bool isValid = true;
-            //while (isValid && Physics.Raycast(ray, out hit))
-            //{
-            //    isValid = hit.collider.gameObject.TryGetComponent<VoxelRender>(out render);
-            //    if (isValid)
-            //    {
-            //        RemoveVoxelHit(hit);
-            //    }
-            //}
+            int x1 = end.x, y1 = end.y, z1 = end.z, x0 = start.x, y0 = start.y, z0 = start.z;
+            int dx = Mathf.Abs(x1 - x0);
+            int dy = Mathf.Abs(y1 - y0);
+            int dz = Mathf.Abs(z1 - z0);
+            int stepX = x0 < x1 ? 1 : -1;
+            int stepY = y0 < y1 ? 1 : -1;
+            int stepZ = z0 < z1 ? 1 : -1;
+            double hypotenuse = Mathf.Sqrt(dx * dx + dy * dy + dz * dz);
+            double tMaxX = hypotenuse * 0.5 / dx;
+            double tMaxY = hypotenuse * 0.5 / dy;
+            double tMaxZ = hypotenuse * 0.5 / dz;
+            double tDeltaX = hypotenuse / dx;
+            double tDeltaY = hypotenuse / dy;
+            double tDeltaZ = hypotenuse / dz;
+
+            voxelMesh.SetVoxelVisible(new Vector3Int(x0, y0, z0), false);
+
+            while (x0 != x1 || y0 != y1 || z0 != z1)
+            {
+                if (tMaxX < tMaxY)
+                {
+                    if (tMaxX < tMaxZ)
+                    {
+                        x0 = x0 + stepX;
+                        tMaxX = tMaxX + tDeltaX;
+                    }
+                    else if (tMaxX > tMaxZ)
+                    {
+                        z0 = z0 + stepZ;
+                        tMaxZ = tMaxZ + tDeltaZ;
+                    }
+                    else
+                    {
+                        x0 = x0 + stepX;
+                        tMaxX = tMaxX + tDeltaX;
+                        z0 = z0 + stepZ;
+                        tMaxZ = tMaxZ + tDeltaZ;
+                    }
+                }
+                else if (tMaxX > tMaxY)
+                {
+                    if (tMaxY < tMaxZ)
+                    {
+                        y0 = y0 + stepY;
+                        tMaxY = tMaxY + tDeltaY;
+                    }
+                    else if (tMaxY > tMaxZ)
+                    {
+                        z0 = z0 + stepZ;
+                        tMaxZ = tMaxZ + tDeltaZ;
+                    }
+                    else
+                    {
+                        y0 = y0 + stepY;
+                        tMaxY = tMaxY + tDeltaY;
+                        z0 = z0 + stepZ;
+                        tMaxZ = tMaxZ + tDeltaZ;
+
+                    }
+                }
+                else
+                {
+                    if (tMaxY < tMaxZ)
+                    {
+                        y0 = y0 + stepY;
+                        tMaxY = tMaxY + tDeltaY;
+                        x0 = x0 + stepX;
+                        tMaxX = tMaxX + tDeltaX;
+                    }
+                    else if (tMaxY > tMaxZ)
+                    {
+                        z0 = z0 + stepZ;
+                        tMaxZ = tMaxZ + tDeltaZ;
+                    }
+                    else
+                    {
+                        x0 = x0 + stepX;
+                        tMaxX = tMaxX + tDeltaX;
+                        y0 = y0 + stepY;
+                        tMaxY = tMaxY + tDeltaY;
+                        z0 = z0 + stepZ;
+                        tMaxZ = tMaxZ + tDeltaZ;
+
+                    }
+                }
+
+                voxelMesh.SetVoxelVisible(new Vector3Int(x0, y0, z0), false);
+            }
         }
 
         void RemoveVoxelHit(RaycastHit hit)
@@ -73,8 +144,5 @@ namespace Edivox.Editor
                 voxelMesh.SetVoxelVisible(voxel.Position, false);
             }
         }
-
-
-
     }
 }

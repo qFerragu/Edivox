@@ -49,7 +49,7 @@ namespace Edivox.Runtime
         public MeshFilter meshFiltrer = null;
         public MeshRenderer meshRenderer = null;
         public MeshCollider meshCollider = null;
-        public ExportSettings meshSettings = new ExportSettings();
+        public ExportSettings meshSettings = null;
         public VoxelMeshExport meshExport = null;
 
         bool voxelModified = true;
@@ -93,31 +93,12 @@ namespace Edivox.Runtime
                     for (int z = 0; z < _size.z; z++)
                     {
 
-                        //VoxelData voxel = voxelsArray.GetVoxel(x, y, z);
-                        //voxel.Copy(voxelTemplate);
-
-                        //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                        //go.transform.parent = transform;
-                        //Vector3Int position = new Vector3Int(x, y, z);
-                        //go.transform.position = position;
-                        //VoxelRender render = go.AddComponent<VoxelRender>();
-                        //render.voxelData = voxel;
-
-                        //voxel.Position = position;
-                        //voxel.render = render;
-                        //render.voxelMesh = this;
-                        //render.UpdateVoxelRender();
-
                         VoxelData voxel = voxelsArray.GetVoxel(x, y, z);
                         voxel.Copy(voxelTemplate);
                         voxel.Position = new Vector3Int(x, y, z);
                     }
                 }
             }
-
-            meshSettings.pivot = Vector3.zero;
-            meshExport = new VoxelMeshExport(meshSettings);
-
             meshFiltrer = gameObject.AddComponent<MeshFilter>();
             meshFiltrer.sharedMesh = new Mesh();
             meshFiltrer.sharedMesh.name = gameObject.name;
@@ -194,7 +175,7 @@ namespace Edivox.Runtime
             }
         }
 
-        public void Refresh()
+        public void Refresh(bool forceRefreshMesh = false)
         {
             if (colorPalette != null)
             {
@@ -204,31 +185,15 @@ namespace Edivox.Runtime
                 }
             }
 
+            Debug.Log("RefreshObject");
+
             meshFiltrer = gameObject.GetComponent<MeshFilter>();
             meshRenderer = gameObject.GetComponent<MeshRenderer>();
             Material mat = new Material(Shader.Find("Diffuse"));
             mat.mainTexture = colorPalette.CreateTexture();
             meshRenderer.material = mat;
             meshCollider = gameObject.GetComponent<MeshCollider>();
-            voxelModified = true;
-            RefreshMesh();
-            //for (int x = 0; x < meshSize.x; x++)
-            //{
-            //    for (int y = 0; y < meshSize.y; y++)
-            //    {
-
-            //        for (int z = 0; z < meshSize.z; z++)
-            //        {
-            //            VoxelData vo = voxelsArray.GetVoxel(x, y, z);
-
-            //            if (vo.render.voxelData != vo)
-            //            {
-            //                vo.render.voxelData = vo;
-            //            }
-            //            vo.render.UpdateVoxelRender();
-            //        }
-            //    }
-            //}
+            RefreshMesh(forceRefreshMesh);
         }
 
         public void Fill(bool _visible)
@@ -253,12 +218,26 @@ namespace Edivox.Runtime
 
         }
 
-        public void RefreshMesh()
+        public void RefreshMesh(bool forced = false)
         {
-            if (voxelModified && meshExport != null)
+            if (meshSettings == null)
             {
+                meshSettings = new ExportSettings();
+                meshSettings.pivot = Vector3.zero;
+            }
+
+            if (meshExport == null)
+            {
+                meshExport = new VoxelMeshExport(meshSettings);
+            }
+
+            if ((voxelModified || forced) && meshExport != null)
+            {
+
                 meshExport.GenerateMesh(this, meshFiltrer, meshCollider);
                 voxelModified = false;
+                Debug.Log("RefreshMesh");
+
             }
         }
 

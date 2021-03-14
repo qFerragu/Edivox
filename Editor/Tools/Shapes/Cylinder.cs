@@ -16,8 +16,8 @@ namespace Edivox.Editor
 
             GetMinMaxSelection(startPos, lastPos, ref min, ref max);
 
-            Undo.RecordObject(voxelMesh, "Cylinder VoxelMesh");
-            EditorUtility.SetDirty(voxelMesh);
+            //Undo.RecordObject(voxelMesh, "Cylinder VoxelMesh");
+            //EditorUtility.SetDirty(voxelMesh);
             MakeCylinder(min, max);
             firstVoxel = null;
         }

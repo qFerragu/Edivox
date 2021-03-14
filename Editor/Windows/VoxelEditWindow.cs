@@ -183,8 +183,6 @@ namespace Edivox.Editor
             if (!foldoutTool)
                 return;
 
-
-
             if (tool == null)
             {
                 GUILayout.Label("None");
@@ -199,6 +197,12 @@ namespace Edivox.Editor
             if (GUILayout.Button("Brush"))
             {
                 tool = new Brush();
+            }
+            EditorGUI.EndDisabledGroup();
+            EditorGUI.BeginDisabledGroup(tool.GetType().Name == "Line");
+            if (GUILayout.Button("Line"))
+            {
+                tool = new Line();
             }
             EditorGUI.EndDisabledGroup();
             EditorGUI.BeginDisabledGroup(tool.GetType().Name == "Box");
@@ -232,15 +236,15 @@ namespace Edivox.Editor
 
             if (GUILayout.Button("Fill"))
             {
-                Undo.RecordObject(voxelMesh, "Fill VoxelMesh");
-                EditorUtility.SetDirty(voxelMesh);
+                //Undo.RecordObject(voxelMesh, "Fill VoxelMesh");
+                //EditorUtility.SetDirty(voxelMesh);
                 voxelMesh.Fill(true);
             }
 
             if (GUILayout.Button("Empty"))
             {
-                Undo.RecordObject(voxelMesh, "Empty VoxelMesh");
-                EditorUtility.SetDirty(voxelMesh);
+                //Undo.RecordObject(voxelMesh, "Empty VoxelMesh");
+                //EditorUtility.SetDirty(voxelMesh);
                 voxelMesh.Fill(false);
             }
 
@@ -259,7 +263,7 @@ namespace Edivox.Editor
             {
                 if (voxelMesh != null)
                 {
-                    Undo.RecordObject(voxelMesh, "VoxelMesh");
+                    //Undo.RecordObject(voxelMesh, "VoxelMesh");
                     voxelMesh.Refresh();
                 }
             }
@@ -339,7 +343,7 @@ namespace Edivox.Editor
         {
             if (voxelMesh != null)
             {
-                voxelMesh.Refresh();
+                voxelMesh.Refresh(true);
             }
         }
 

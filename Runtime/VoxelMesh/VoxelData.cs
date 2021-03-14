@@ -43,7 +43,7 @@ namespace Edivox.Runtime
     {
         public VoxelData[] voxels;
         public int width, height, length;
-
+        public VoxelDataSave SaveObject;
         public MultiArrayVoxelData(int _width, int _height, int _length)
         {
             width = _width;
@@ -60,6 +60,8 @@ namespace Edivox.Runtime
                     }
                 }
             }
+            SaveObject = new VoxelDataSave();
+            SaveObject.voxels = voxels;
         }
 
 
@@ -107,6 +109,36 @@ namespace Edivox.Runtime
             return GetVoxel(pos);
         }
 
+        //public VoxelDataSave GetSave()
+        //{
+        //    new voxel
+        //}
+
+    }
+
+    public class VoxelDataSave : ScriptableObject
+    {
+        public VoxelData[] voxels;
+        public int width, height, length;
+
+        void SetVoxels(VoxelData[] voxelsArray, int _width, int _height, int _lenght)
+        {
+            Array.Copy(voxelsArray, voxels, _width * _height * _lenght);
+            width = _width;
+            height = _height;
+            length = _lenght;
+        }
+
+        void LoadVoxels(VoxelData[] voxelsArray, int _width, int _height, int _lenght)
+        {
+            if (_width != width || _height != height || _lenght != length )
+            {
+                return;
+            }
+
+
+
+        }
 
     }
 

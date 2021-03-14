@@ -15,8 +15,8 @@ namespace Edivox.Editor
             Vector3Int max = Vector3Int.zero;
             GetMinMaxSelection(startPos, lastPos, ref min, ref max);
 
-            Undo.RecordObject(voxelMesh, "Box VoxelMesh");
-            EditorUtility.SetDirty(voxelMesh);
+            //Undo.RecordObject(voxelMesh, "Box VoxelMesh");
+            //EditorUtility.SetDirty(voxelMesh.voxelsArray.SaveObject);
             MakeBox(min, max);
             firstVoxel = null;
         }

@@ -14,8 +14,8 @@ namespace Edivox.Editor
             Vector3Int min = Vector3Int.zero;
             Vector3Int max = Vector3Int.zero;
             GetMinMaxSelection(startPos, lastPos, ref min, ref max);
-            Undo.RecordObject(voxelMesh, "Sphere VoxelMesh");
-            EditorUtility.SetDirty(voxelMesh);
+            //Undo.RecordObject(voxelMesh, "Sphere VoxelMesh");
+            //EditorUtility.SetDirty(voxelMesh);
             MakeSphere(min, max);
             firstVoxel = null;
         }
@@ -116,7 +116,7 @@ namespace Edivox.Editor
                     int cy = (height / 2 - hInt / 2);
 
                     points.Add(new Vector3Int(cx + item.x, cy + item.y, cd + i));
-                    points.Add(new Vector3Int(cx + item.x, cx + item.y, cd - i - dd));
+                    points.Add(new Vector3Int(cx + item.x, cy + item.y, cd - i - dd));
 
                 }
 

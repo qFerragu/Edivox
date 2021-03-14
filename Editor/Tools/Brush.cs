@@ -13,7 +13,7 @@ namespace Edivox.Editor
 
         public override void OnClickPress(RaycastHit hit)
         {
-            Undo.RecordObject(voxelMesh, "Brush VoxelMesh");
+            //Undo.RecordObject(voxelMesh, "Brush VoxelMesh");
 
             if (voxelMesh == null)
                 return;
