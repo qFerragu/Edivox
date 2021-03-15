@@ -185,7 +185,7 @@ namespace Edivox.Runtime
                 }
             }
 
-            Debug.Log("RefreshObject");
+            //Debug.Log("RefreshObject");
 
             meshFiltrer = gameObject.GetComponent<MeshFilter>();
             meshRenderer = gameObject.GetComponent<MeshRenderer>();
@@ -236,7 +236,7 @@ namespace Edivox.Runtime
 
                 meshExport.GenerateMesh(this, meshFiltrer, meshCollider);
                 voxelModified = false;
-                Debug.Log("RefreshMesh");
+                //Debug.Log("RefreshMesh");
 
             }
         }
