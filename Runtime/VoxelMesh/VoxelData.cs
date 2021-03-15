@@ -60,8 +60,8 @@ namespace Edivox.Runtime
                     }
                 }
             }
-            SaveObject = new VoxelDataSave();
-            SaveObject.voxels = voxels;
+            //SaveObject = new VoxelDataSave();
+            //SaveObject.voxels = voxels;
         }
 
 

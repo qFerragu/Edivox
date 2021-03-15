@@ -38,7 +38,6 @@ namespace Edivox.Runtime
                 return;
             MeshData meshData = new MeshData();
             meshData.useRenderDataForCol = collider != null;
-
             tileSize.x = 1f / voxelMesh.ColorPalette.colors.Count;
             tileSize.y = 1f;
 
@@ -58,17 +57,18 @@ namespace Edivox.Runtime
             }
 
             filter.sharedMesh.Clear();
+            filter.sharedMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
             filter.sharedMesh.vertices = meshData.vertices.ToArray();
             filter.sharedMesh.triangles = meshData.triangles.ToArray();
             filter.sharedMesh.uv = meshData.uv.ToArray();
             filter.sharedMesh.RecalculateNormals();
             filter.sharedMesh.RecalculateTangents();
             filter.sharedMesh.Optimize();
-
             if (meshData.useRenderDataForCol)
             {
                 collider.sharedMesh = null;
                 Mesh mesh = new Mesh();
+                mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
                 mesh.vertices = meshData.colVertices.ToArray();
                 mesh.triangles = meshData.colTriangles.ToArray();
                 mesh.RecalculateNormals();
